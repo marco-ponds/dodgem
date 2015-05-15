@@ -16,6 +16,11 @@ Class("Dodgem", {
 	Dodgem: function() {
 		App.call(this);
 		// we now should connect to server
+		
+	},
+
+	onCreate: function() {
+
 		this.socket = io("http://marcostagni.com:8080");
 		// setting socket listeners
 		this.socket.on("shooting", app.onShooting);
@@ -23,9 +28,6 @@ Class("Dodgem", {
 		this.socket.on("pending", app.onPending);
 		this.socket.on("matchstarted", app.onMatchStarted);
 		this.socket.on("goneplayer", app.onGonePlayer);
-	},
-
-	onCreate: function() {
 
 		app.socket.emit("new player", {x: 0, y: 0, z: 0});
 		// setting fps control
