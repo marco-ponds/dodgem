@@ -16,10 +16,18 @@ Class("Dodgem", {
 	Dodgem: function() {
 		App.call(this);
 		// we now should connect to server
+		this.socket = io("http://marcostagni.com:8080");
+		// setting socket listeners
+		this.socket.on("shooting", app.onShooting);
+		this.socket.on("move", app.onMove);
+		this.socket.on("pending", app.onPending);
+		this.socket.on("matchstarted", app.onMatchStarted);
+		this.socket.on("goneplayer", app.onGonePlayer);
 	},
 
 	onCreate: function() {
 
+		app.socket.emit("new player", {x: 0, y: 0, z: 0});
 		// setting fps control
 		Control.set("fps")
 		Control.options.fps.height = 2
@@ -34,9 +42,6 @@ Class("Dodgem", {
 
 		// creating platform
 		this.platform = new Platform();
-		include("app/Player", function() {
-			app.player = new Player();
-		})
 
 		app.camera.object.position.set(0, 25, 0);
 		app.camera.addScript("cameraScript", "camera");
@@ -100,6 +105,33 @@ Class("Dodgem", {
 		}
 	},
 
+	// SOCKET EVENTS
+
+	onMatchStarted: function(data) {
+		alert(data.message);
+		include("app/Player", function() {
+			app.opponent = new Player();
+		});
+	},
+
+	onGonePlayer: function(data) {
+		alert(data.message);
+	},
+
+	onPending: function(data) {
+		alert(data.message);
+	},
+
+	onShooting: function(data) {
+
+	},
+
+	onMove: function(data) {
+		// opponent is moving
+		app.opponent.body.mesh.position.set(data.x, data.y, data.z)
+		app.opponent.body.mesh.rotation.set(data.rotx, data.roty, data.rotz);
+	},
+
 	shoot: function(flag) {
 
 		// shooting from left or right gun
@@ -126,6 +158,8 @@ Class("Dodgem", {
 		app.bullets.push(sphere.mesh);
 
 		new Sound("shot", {mesh: Control.handler.getObject()}).start();
+
+		// emitting shooting event
 
 		return sphere;
 	}

@@ -41,6 +41,16 @@ Game.script("cameraScript", {
 		if (!hit) {
 			this.old_position = this.object.parent.parent.position.clone();
 		}
+
+		// sending movement via socket
+		app.socket.emit("move player", {
+			x: this.object.parent.parent.position.x,
+			y: this.object.parent.parent.position.y,
+			z: this.object.parent.parent.position.z,
+			rotx: 0,
+			roty: 0,
+			rotz: 0
+		});
 	}
 
 });

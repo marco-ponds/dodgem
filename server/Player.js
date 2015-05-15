@@ -3,6 +3,10 @@ var Player = function(startx, starty, startz, socket) {
         y = starty,
         z = startz,
         socket = socket;
+        rotx,
+        roty,
+        rotz,
+        id;
 
     // getters
 
@@ -20,6 +24,18 @@ var Player = function(startx, starty, startz, socket) {
 
     var getSocket = function() {
         return socket;
+    }
+
+    var getRotX = function() {
+        return rotx;
+    }
+
+    var getRotY = function() {
+        return roty;
+    }
+
+    var getRotZ = function() {
+        return rotz;
     }
 
     // setters
@@ -40,14 +56,32 @@ var Player = function(startx, starty, startz, socket) {
         socket = socket;
     }
 
+    var setRotX = function(value) {
+        rotx = value;
+    }
+
+    var setRotY = function(value) {
+        roty = value;
+    }
+
+    var setRotZ = function(value) {
+        rotz = value;
+    }
+
     return {
         getX: getX,
         getY: getY,
         getZ: getZ,
+        getRotX: getRotX,
+        getRotY: getRotY,
+        getRotZ: getRotZ,
         getHealth: getHealth,
         setX: setX,
         setY: setY,
         setZ: setZ,
+        setRotX: setRotX,
+        setRotY: setRotY,
+        setRotZ: setRotZ,
         setHealth: setHealth,
         id: id
     }

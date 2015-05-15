@@ -68,7 +68,7 @@ function onClientDisconnect() {
     }
 
     // sending data to opponent
-    playerById(opponentId).getSocket().emit("gone player", {status: "gone player", message: "Your opponent is no longer online"});
+    playerById(opponentId).getSocket().emit("goneplayer", {status: "gone player", message: "Your opponent is no longer online"});
     // opponent player gets back to pending status
     pendings.push(opponentId);
 };
@@ -116,6 +116,9 @@ function onMovePlayer(data) {
     movePlayer.setX(data.x);
     movePlayer.setY(data.y);
     movePlayer.setZ(data.z);
+    movePlayer.setRotX(data.rotx);
+    movePlayer.setRotY(data.roty);
+    movePlayer.setRotZ(data.rotz);
 
     // searching for matched player, and sending data
     var opponentId = matches[this.id];
@@ -152,7 +155,7 @@ function onShootingPlayer(data) {
         return;
     }
     // sending data to player
-    playerById(opponentId).getSocket().emit("move", {
+    playerById(opponentId).getSocket().emit("shooting", {
         x: data.startx,
         y: data.starty,
         z: data.startz,
