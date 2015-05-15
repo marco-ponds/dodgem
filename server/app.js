@@ -14,7 +14,7 @@ function init() {
     pendings = [];
     matches = {};
     // socket.io setup
-    socket = io.listen(8080);
+    socket = io.listen(8000);
     //socket.configure(function() {
         // setting socket io transport
     socket.set("transports", ["websocket"]);
