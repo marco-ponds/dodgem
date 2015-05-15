@@ -2,7 +2,7 @@
 var util = require("util"),
     io = require("socket.io"),
     _ = require("underscore"),
-    Player = require("./Player.js");
+    Player = require("./Player.js").Player;
 
 // server variables
 var socket, players, pendings, matches;
@@ -10,7 +10,7 @@ var socket, players, pendings, matches;
 
 // init method
 function init() {
-    player = [];
+    players = [];
     pendings = [];
     matches = {};
     // socket.io setup
@@ -21,6 +21,7 @@ function init() {
         // setting socket io log level
     socket.set("log lever", 2);
     //});
+    setEventHandlers();
 }
 
 var setEventHandlers = function() {
@@ -57,9 +58,10 @@ function onClientDisconnect() {
         return;
     };
 
-    // Remove player from players array
-    players.splice(players.indexOf(removePlayer), 1);
-    pendings = _.without(pendings, removePlayer.id);
+    // remove match
+    id = matches[this.id];
+    matches[id] = undefined;
+    matches[this.id] = undefined;
 
     var opponentId = matches[this.id];
     if (!opponentId) {
@@ -69,6 +71,11 @@ function onClientDisconnect() {
 
     // sending data to opponent
     playerById(opponentId).getSocket().emit("goneplayer", {status: "gone player", message: "Your opponent is no longer online"});
+    
+    // Remove player from players array
+    players.splice(players.indexOf(removePlayer), 1);
+    pendings = _.without(pendings, removePlayer.id);
+
     // opponent player gets back to pending status
     pendings.push(opponentId);
 };
@@ -79,6 +86,7 @@ function onNewPlayer(data) {
     var newPlayer = new Player(data.x, data.y, data.z, this);
     newPlayer.id = this.id;
 
+    console.log("creating new player");
     // Add new player to the players array
     players.push(newPlayer);
 
@@ -86,9 +94,10 @@ function onNewPlayer(data) {
     var id = _.sample(pendings);
     if (!id) {
         // we didn't find a player
+        console.log("added " + this.id + " to pending");
         pendings.push(newPlayer.id);
         // sending a pending event to player
-        newPlayer.getsocket().emit("pending", {status: "pending", message: "waiting for a new player."});
+        newPlayer.getSocket().emit("pending", {status: "pending", message: "waiting for a new player."});
     } else {
         // creating match
         pendings = _.without(pendings, id);
@@ -108,7 +117,7 @@ function onMovePlayer(data) {
 
     // Player not found
     if (!movePlayer) {
-        util.log("Player not found: "+this.id);
+        //util.log("Player not found: "+this.id);
         return;
     };
 
@@ -123,7 +132,7 @@ function onMovePlayer(data) {
     // searching for matched player, and sending data
     var opponentId = matches[this.id];
     if (!opponentId) {
-        util.log("No match found!");
+        //util.log("No match found!");
         return;
     }
     // sending data to player

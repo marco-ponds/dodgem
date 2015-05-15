@@ -2,7 +2,7 @@ var Player = function(startx, starty, startz, socket) {
     var x = startx,
         y = starty,
         z = startz,
-        socket = socket;
+        socket = socket,
         rotx,
         roty,
         rotz,
@@ -75,14 +75,14 @@ var Player = function(startx, starty, startz, socket) {
         getRotX: getRotX,
         getRotY: getRotY,
         getRotZ: getRotZ,
-        getHealth: getHealth,
+        getSocket: getSocket,
         setX: setX,
         setY: setY,
         setZ: setZ,
         setRotX: setRotX,
         setRotY: setRotY,
         setRotZ: setRotZ,
-        setHealth: setHealth,
+        setSocket: setSocket,
         id: id
     }
 };

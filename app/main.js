@@ -16,18 +16,21 @@ Class("Dodgem", {
 	Dodgem: function() {
 		App.call(this);
 		// we now should connect to server
-		
 	},
 
 	onCreate: function() {
 
-		this.socket = io("http://marcostagni.com:8080");
+		var server = "http://marcostagni.com:8080";//"http://192.168.0.104:8080";
+		this.socket = io(server, {'transports': ['websocket']});//io("http://marcostagni.com:8080");
+		this.socket.on("connect", function(data) {
+			console.log(data);
+		});
 		// setting socket listeners
 		this.socket.on("shooting", app.onShooting);
 		this.socket.on("move", app.onMove);
 		this.socket.on("pending", app.onPending);
 		this.socket.on("matchstarted", app.onMatchStarted);
-		this.socket.on("goneplayer", app.onGonePlayer);
+		this.socket.on("goneplayer", app.onGonePlayer);	
 
 		app.socket.emit("new player", {x: 0, y: 0, z: 0});
 		// setting fps control
@@ -121,6 +124,7 @@ Class("Dodgem", {
 	},
 
 	onPending: function(data) {
+		console.log("received pending message");
 		alert(data.message);
 	},
 
@@ -130,8 +134,8 @@ Class("Dodgem", {
 
 	onMove: function(data) {
 		// opponent is moving
-		app.opponent.body.mesh.position.set(data.x, data.y, data.z)
-		app.opponent.body.mesh.rotation.set(data.rotx, data.roty, data.rotz);
+		app.opponent.body.mesh.position.set(data.x, data.y + 25, data.z)
+		//app.opponent.body.mesh.rotation.set(data.rotx, data.roty, data.rotz);
 	},
 
 	shoot: function(flag) {
