@@ -1,0 +1,12 @@
+{
+    "name": "dodgem",
+    "version": "1.0.0",
+    "description": "",
+    "main": "",
+    "author": "Marco Stagni <http://marcostagni.com>, mrc.stagni@gmail.com",
+    "license": "MIT",
+    "dependencies": {
+        "socket.io": "*",
+        "underscore": "*"
+    }
+}
