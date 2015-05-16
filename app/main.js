@@ -331,6 +331,7 @@ Game.update = function() {
 				hit = true;
 			}
 		} else {
+			if (!app.opponent) break;
 			if (distance(p.x, p.y, p.z, app.opponent.body.mesh.position.x, app.opponent.body.mesh.position.y, app.opponent.body.mesh.position.z) < 100) {
 				console.log("HIT");
 				app.bullets.splice(i, 1);
