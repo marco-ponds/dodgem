@@ -58,20 +58,27 @@ function onClientDisconnect() {
         return;
     };
 
-    // remove match
-    id = matches[this.id];
-    matches[id] = undefined;
-    matches[this.id] = undefined;
-
     var opponentId = matches[this.id];
     if (!opponentId) {
         util.log("No match found!");
+
+        // remove match ( it should be already undefined ..)
+        matches[this.id] = undefined;
+
+        // Remove player from players array
+        players.splice(players.indexOf(removePlayer), 1);
+        pendings = _.without(pendings, removePlayer.id);
         return;
     }
 
     // sending data to opponent
     playerById(opponentId).getSocket().emit("goneplayer", {status: "gone player", message: "Your opponent is no longer online"});
     
+    // remove match
+    id = matches[this.id];
+    matches[id] = undefined;
+    matches[this.id] = undefined;
+
     // Remove player from players array
     players.splice(players.indexOf(removePlayer), 1);
     pendings = _.without(pendings, removePlayer.id);
