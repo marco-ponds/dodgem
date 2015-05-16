@@ -313,7 +313,7 @@ Game.update = function() {
 		}
 		// Bullet hits player
 		if (b.shotby != "me") {
-			if (distance(p.x, p.z, app.camera.object.parent.parent.position.x, app.camera.object.parent.parent.position.z) < 25) {
+			if (distance(p.x, p.z, app.camera.object.parent.parent.position.x, app.camera.object.parent.parent.position.z) < 5) {
 				$('#hurt').fadeIn(75);
 				Game.HEALTH -= 100;
 				if (health < 0) health = 0;
