@@ -84,6 +84,10 @@ function onClientDisconnect() {
     id = matches[this.id];
     matches[id] = undefined;
     matches[this.id] = undefined;
+    try {
+        delete matches[id];
+        delete matches[this.id];
+    } catch(e) {}
 
     // Remove player from players array
     players.splice(players.indexOf(removePlayer), 1);

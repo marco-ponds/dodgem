@@ -140,6 +140,7 @@ Class("Dodgem", {
 	},
 
 	onShooting: function(data) {
+		console.log(data)
 		// some one is shooting us!
 		var sphere = new Mesh(app.enemybulletgeo, app.enemybulletmat);
 		sphere.mesh.position = new THREE.Vector3(data.startx, data.starty, data.startz);
