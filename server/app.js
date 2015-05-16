@@ -172,9 +172,9 @@ function onShootingPlayer(data) {
     }
     // sending data to player
     playerById(opponentId).getSocket().emit("shooting", {
-        x: data.startx,
-        y: data.starty,
-        z: data.startz,
+        startx: data.startx,
+        starty: data.starty,
+        startz: data.startz,
         dirx: data.diry,
         diry: data.diry,
         dirz: data.diry

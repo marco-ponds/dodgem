@@ -111,24 +111,40 @@ Class("Dodgem", {
 	},
 
 	// SOCKET EVENTS
-
 	onMatchStarted: function(data) {
-		alert(data.message);
+		swal(data.message, "Kill him!", "success");
 		include("app/Player", function() {
 			app.opponent = new Player();
 		});
+		app.waitingForPlayer = false;
 	},
 
 	onGonePlayer: function(data) {
-		alert(data.message);
+		swal(data.message, "Maybe you're too good for him!", "warning");
 	},
 
 	onPending: function(data) {
 		console.log("received pending message");
-		alert(data.message);
+		swal(data.message, "Waiting for a player to come in.", "info");
+		app.waitingForPlayer = true;
 	},
 
 	onShooting: function(data) {
+		// some one is shooting us!
+		var sphere = new Mesh(app.bulletgeo, app.bulletmat);
+		sphere.mesh.position = new THREE.Vector3(data.startx, data.starty, data.startz);
+
+		// setting color
+		sphere.mesh.material.color = new THREE.Color(0xff0000);
+		//sphere.mesh.rotation.set(gunrotation.x, gunrotation.y, gunrotation.z)
+		sphere.mesh.position.y += 25;
+		sphere.mesh.pointing = new THREE.Vector3(data.dirx, data.diry, data.dirz);
+
+		sphere.mesh.shotby = "enemy";
+
+		app.bullets.push(sphere.mesh);
+
+		new Sound("shot", {mesh: app.opponent.body.mesh}).start();
 
 	},
 
@@ -165,7 +181,15 @@ Class("Dodgem", {
 
 		new Sound("shot", {mesh: Control.handler.getObject()}).start();
 
-		// emitting shooting event
+		// emitting shooting event, must send initial position of bullet, direction
+		app.socket.emit("shooting player", {
+			startx: gunposition.x,
+			starty: gunposition.y,
+			startz: gunposition.z,
+			dirx: sphere.mesh.pointing.x,
+			diry: sphere.mesh.pointing.y,
+			dirz: sphere.mesh.pointing.z
+		});
 
 		return sphere;
 	}
@@ -174,8 +198,11 @@ Class("Dodgem", {
 
 Game.BULLET_SPEED = 2000
 Game.BULLET_DAMAGE = 100
+Game.HEALTH = 6000
+Game.MAX_HEALTH = 6000
 
 Game.update = function() {
+
 	// Update bullets. Walk backwards through the list so we can remove items.
 	app.bullets = app.bullets || [];
 	var speed = app.clock.getDelta() * Game.BULLET_SPEED;
@@ -190,6 +217,9 @@ Game.update = function() {
 		var hit = false;
 		// Collide with obstacle
 		for (var j = app.platform.obstacles.length-1; j >= 0; j--) {
+			// breaking if we're waiting for player
+			if (app.waitingForPlayer) break;
+
 			var a = app.platform.obstacles[j];
 			var v = a.geometry.vertices[0];
 			var c = a.position;
@@ -219,14 +249,14 @@ Game.update = function() {
 		}
 		// Bullet hits player
 		if (b.shotby != "me") {
-			if (distance(p.x, p.z, app.camera.object.position.x, app.camera.object.position.z) < 25 && b.owner != app.camera.object) {
-				/*$('#hurt').fadeIn(75);
-				health -= 10;
+			if (distance(p.x, p.z, app.camera.object.parent.parent.position.x, app.camera.object.parent.parent.position.z) < 25) {
+				$('#hurt').fadeIn(75);
+				Game.HEALTH -= 100;
 				if (health < 0) health = 0;
-				val = health < 25 ? '<span style="color: darkRed">' + health + '</span>' : health;
-				$('#health').html(val);
-				$('#hurt').fadeOut(350);*/
-				console.log("HIT");
+				var per = (app.windowHalfY*2*Game.HEALTH)/Game.MAX_HEALTH;
+				$('#health').css("width", per+"%");
+				$('#hurt').fadeOut(350);
+				//console.log("HIT");
 				app.bullets.splice(i, 1);
 				app.scene.remove(b);
 			}
