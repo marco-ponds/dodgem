@@ -316,7 +316,7 @@ Game.update = function() {
 			if (distance(p.x, p.z, app.camera.object.parent.parent.position.x, app.camera.object.parent.parent.position.z) < 5) {
 				$('#hurt').fadeIn(75);
 				Game.HEALTH -= 100;
-				if (health < 0) health = 0;
+				if (Game.HEALTH < 0) Game.HEALTH = 0;
 				var per = (app.windowHalfY*2*Game.HEALTH)/Game.MAX_HEALTH;
 				$('#health').css("width", per+"%");
 				$('#hurt').fadeOut(350);
@@ -324,7 +324,7 @@ Game.update = function() {
 				app.bullets.splice(i, 1);
 				app.scene.remove(b);
 
-				if (health == 0) {
+				if (Game.HEALTH == 0) {
 					Game.Die();
 				}
 			}
