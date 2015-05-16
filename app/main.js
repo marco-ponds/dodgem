@@ -318,7 +318,7 @@ Game.update = function() {
 				$('#hurt').fadeIn(75);
 				Game.HEALTH -= 100;
 				if (Game.HEALTH < 0) Game.HEALTH = 0;
-				var per = (app.windowHalfY*2*Game.HEALTH)/Game.MAX_HEALTH;
+				var per = (100*Game.HEALTH)/Game.MAX_HEALTH;
 				$('#health').css("width", per+"%");
 				$('#hurt').fadeOut(350);
 				//console.log("HIT");
