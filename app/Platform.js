@@ -100,17 +100,18 @@ Class("Platform", {
         this.walls.push(new Mesh(geometry, material))
         this.walls[3].mesh.position.set(0, 0, 1000)
 
-        // creating random obstacles
+        // this need to be empty
         this.obstacles = [];
+
+    },
+
+    createObstacles: function(numObstacles, height, positions) {
+        // creating random obstacles
         var texture = THREE.ImageUtils.loadTexture( "img/platform_obstacle.jpg" );
         this.cracked_texture = THREE.ImageUtils.loadTexture( "img/platform_obstacle_cracked.jpg" );
         texture.wrapS = THREE.RepeatWrapping;
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(1, 1);
-
-    },
-
-    createObstacles: function(numObstacles, height, positions) {
         //var numObstacles = _.random(10, 30)
         for (var i=0; i<numObstacles; i++) {
             //height = _.random(70, 100)

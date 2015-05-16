@@ -116,10 +116,25 @@ function onNewPlayer(data) {
         pendings = _.without(pendings, id);
         matches[id] = newPlayer.id;
         matches[newPlayer.id] = id;
-
+        console.log(matches);
+        // generating world for this match
+        var numObstacles = _.random(10, 30);
+        var height = _.random(70, 100);
+        var MAX_X = 490
+        var MINUS_MAX_X = -490
+        var MAX_Z = 990
+        var MINUS_MAX_Z = -990
+        var positions = [];
+        for (var i=0; i<numObstacles; i++) {
+            positions.push({
+                x: _.random(MINUS_MAX_X, MAX_X),
+                z: _.random(MINUS_MAX_Z, MAX_Z) 
+            });
+        }
+        console.log(numObstacles, height, positions);
         // sending both player info that they're connected
-        newPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!"});
-        playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!"});
+        newPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions});
+        playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions});
     }
 };
 
@@ -184,6 +199,7 @@ function onAnotherMatchRequested(data) {
                 z: _.random(MINUS_MAX_Z, MAX_Z) 
             });
         }
+        console.log(numObstacles, height, positions);
         // sending both player info that they're connected
         requestingPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions});
         playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions});

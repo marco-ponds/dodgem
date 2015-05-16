@@ -20,7 +20,7 @@ Class("Dodgem", {
 
 	onCreate: function() {
 
-		var server = "http://marcostagni.com:8000";//"http://192.168.0.104:8080";
+		var server = "http://192.168.0.104:8000";
 		this.socket = io(server, {'transports': ['websocket']});//io("http://marcostagni.com:8080");
 		this.socket.on("connect", function(data) {
 			console.log(data);
@@ -126,7 +126,7 @@ Class("Dodgem", {
 		});
 		app.waiting = false;
 		//creating platform
-		app.platform.createObstacles(data.numObstacles, data.height, data.position);
+		app.platform.createObstacles(data.numObstacles, data.height, data.positions);
 	},
 
 	onGonePlayer: function(data) {
