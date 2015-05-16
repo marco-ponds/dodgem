@@ -49,7 +49,7 @@ function onSocketConnection(client) {
     client.on("Idied", onDeadPlayer);
 
     // Listen for another match message
-    client.on("anothermatch", onAnotherMatchRequest);
+    client.on("anothermatch", onAnotherMatchRequested);
 };
 
 // Socket client has disconnected
