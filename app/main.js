@@ -143,12 +143,10 @@ Class("Dodgem", {
 		console.log(data)
 		// some one is shooting us!
 		var sphere = new Mesh(app.enemybulletgeo, app.enemybulletmat);
-		sphere.mesh.position = new THREE.Vector3(data.startx, data.starty, data.startz);
+		console.log(data)
+		sphere.mesh.position.set(data.startx, data.starty, data.startz);
 
-		// setting color
-		//sphere.mesh.material.color = new THREE.Color(0xff0000);
 		//sphere.mesh.rotation.set(gunrotation.x, gunrotation.y, gunrotation.z)
-		sphere.mesh.position.y += 25;
 		sphere.mesh.pointing = new THREE.Vector3(data.dirx, data.diry, data.dirz);
 
 		sphere.mesh.shotby = "enemy";
@@ -157,7 +155,7 @@ Class("Dodgem", {
 
 		new Sound("shot", {mesh: app.opponent.body.mesh}).start();
 
-		return sphere;
+		console.log(sphere);
 
 	},
 
@@ -197,9 +195,9 @@ Class("Dodgem", {
 
 		// emitting shooting event, must send initial position of bullet, direction
 		app.socket.emit("shooting player", {
-			startx: gunposition.x,
-			starty: gunposition.y,
-			startz: gunposition.z,
+			startx: sphere.mesh.position.x,
+			starty: sphere.mesh.position.y,
+			startz: sphere.mesh.position.z,
 			dirx: sphere.mesh.pointing.x,
 			diry: sphere.mesh.pointing.y,
 			dirz: sphere.mesh.pointing.z
@@ -210,7 +208,7 @@ Class("Dodgem", {
 
 })._extends("App");
 
-Game.BULLET_SPEED = 10//2000
+Game.BULLET_SPEED = 2000
 Game.BULLET_DAMAGE = 100
 Game.HEALTH = 6000
 Game.MAX_HEALTH = 6000
@@ -316,7 +314,7 @@ Game.update = function() {
 		}
 		// Bullet hits player
 		if (b.shotby != "me") {
-			if (distance(p.x, p.z, app.camera.object.parent.parent.position.x, app.camera.object.parent.parent.position.z) < 5) {
+			if (distance(p.x, p.y, p.z, app.camera.object.parent.parent.position.x, app.camera.object.parent.parent.position.y, app.camera.object.parent.parent.position.z) < 100) {
 				$('#hurt').fadeIn(75);
 				Game.HEALTH -= 100;
 				if (Game.HEALTH < 0) Game.HEALTH = 0;
@@ -330,6 +328,16 @@ Game.update = function() {
 				if (Game.HEALTH == 0) {
 					Game.Die();
 				}
+				hit = true;
+			}
+		} else {
+			if (distance(p.x, p.y, p.z, app.opponent.body.mesh.position.x, app.opponent.body.mesh.position.y, app.opponent.body.mesh.position.z) < 100) {
+				console.log("HIT");
+				app.bullets.splice(i, 1);
+				app.scene.remove(b);
+				hit = true;
+			} else {
+				console.log("NOT HIT");
 			}
 		}
 		if (!hit) {
@@ -341,8 +349,10 @@ Game.update = function() {
 }
 
 // calculating distance
-function distance(x1, y1, x2, y2) {
-	return Math.sqrt((x2-x1)*(x2-x1)+(y2-y1)*(y2-y1));
+function distance(x1, y1, z1, x2, y2, z2) {
+	var value = Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1))+((z2-z1)*(z2-z1)));
+	console.log(value);
+	return value;
 }
 
 function checkInsideArena(position) {

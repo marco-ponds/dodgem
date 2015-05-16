@@ -268,9 +268,9 @@ function onShootingPlayer(data) {
         startx: data.startx,
         starty: data.starty,
         startz: data.startz,
-        dirx: data.diry,
+        dirx: data.dirx,
         diry: data.diry,
-        dirz: data.diry
+        dirz: data.dirz
     });
 }
 
