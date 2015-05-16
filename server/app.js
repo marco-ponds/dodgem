@@ -142,7 +142,7 @@ function onDeadPlayer(data) {
     }
 
     // the other player has win!
-    playerById(opponentId).emit("win");
+    playerById(opponentId).getSocket().emit("win");
 }
 
 // Player has requested another match
