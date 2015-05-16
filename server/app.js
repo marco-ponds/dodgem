@@ -233,14 +233,14 @@ function onShootingPlayer(data) {
 
     // Player not found
     if (!shootingPlayer) {
-        util.log("Player not found: "+this.id);
+        util.log("Shooting - Player not found: "+this.id);
         return;
     };
 
     // searching for matched player, and sending data
     var opponentId = matches[this.id];
     if (!opponentId) {
-        util.log("No match found!");
+        util.log("Shooting - No match found!");
         return;
     }
     // sending data to player

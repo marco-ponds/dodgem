@@ -156,6 +156,8 @@ Class("Dodgem", {
 
 		new Sound("shot", {mesh: app.opponent.body.mesh}).start();
 
+		return sphere;
+
 	},
 
 	onMove: function(data) {
@@ -207,7 +209,7 @@ Class("Dodgem", {
 
 })._extends("App");
 
-Game.BULLET_SPEED = 2000
+Game.BULLET_SPEED = 10//2000
 Game.BULLET_DAMAGE = 100
 Game.HEALTH = 6000
 Game.MAX_HEALTH = 6000
