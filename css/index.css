@@ -51,3 +51,11 @@ canvas{
     color: white;
 }
 
+#hurt {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: none;
+    background: rgba(255, 0, 0, 0.8);
+}
+

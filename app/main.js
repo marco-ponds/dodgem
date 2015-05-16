@@ -30,7 +30,8 @@ Class("Dodgem", {
 		this.socket.on("move", app.onMove);
 		this.socket.on("pending", app.onPending);
 		this.socket.on("matchstarted", app.onMatchStarted);
-		this.socket.on("goneplayer", app.onGonePlayer);	
+		this.socket.on("goneplayer", app.onGonePlayer);
+		this.socket.on("win", Game.Win);
 
 		app.socket.emit("new player", {x: 0, y: 0, z: 0});
 		// setting fps control
@@ -116,7 +117,7 @@ Class("Dodgem", {
 		include("app/Player", function() {
 			app.opponent = new Player();
 		});
-		app.waitingForPlayer = false;
+		app.waiting = false;
 	},
 
 	onGonePlayer: function(data) {
@@ -126,7 +127,7 @@ Class("Dodgem", {
 	onPending: function(data) {
 		console.log("received pending message");
 		swal(data.message, "Waiting for a player to come in.", "info");
-		app.waitingForPlayer = true;
+		app.waiting = true;
 	},
 
 	onShooting: function(data) {
@@ -201,6 +202,59 @@ Game.BULLET_DAMAGE = 100
 Game.HEALTH = 6000
 Game.MAX_HEALTH = 6000
 
+Game.Die = function() {
+	// you lost the match.
+	app.waiting = true;
+	$('#hurt').fadeIn(75);
+	swal({
+		title: "Oh no!",
+		text: "You died! Do you want to play another match?",
+		type: "error",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Yes, another one!",
+		cancelButtonText: "No pls!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function(isConfirm){
+		if (isConfirm) {
+			swal("Good!", "I will search another player for you!", "success");
+			app.socket.emit("anothermatch");
+			// other player must disappear
+			app.scene.remove(app.opponent.body.mesh);
+			app.opponent = undefined;
+			$('#hurt').fadeOut(350);
+		} else {
+			swal("Ok!", "Feel free to wander around, reload the page for another match.", "info");
+			$('#hurt').fadeOut(350);
+		}
+	});
+	app.socket.emit("Idied");
+}
+
+Game.Win = function() {
+	app.waiting = true;
+	// you won the match
+	swal({
+		title: "Hell yeah!",
+		text: "You won! Do you want to play another match?",
+		type: "success",
+		showCancelButton: true,
+		confirmButtonColor: "#DD6B55",
+		confirmButtonText: "Yes, another one!",
+		cancelButtonText: "No pls!",
+		closeOnConfirm: false,
+		closeOnCancel: false
+	}, function(isConfirm){
+		if (isConfirm) {
+			swal("Good!", "Your imaginary file has been deleted.", "success");
+			app.socket.emit("anothermatch");
+		} else {
+			swal("Ok!", "Feel free to wander around, reload the page for another match.", "info");
+		}
+	});
+}
+
 Game.update = function() {
 
 	// Update bullets. Walk backwards through the list so we can remove items.
@@ -218,7 +272,7 @@ Game.update = function() {
 		// Collide with obstacle
 		for (var j = app.platform.obstacles.length-1; j >= 0; j--) {
 			// breaking if we're waiting for player
-			if (app.waitingForPlayer) break;
+			if (app.waiting) break;
 
 			var a = app.platform.obstacles[j];
 			var v = a.geometry.vertices[0];
@@ -259,6 +313,10 @@ Game.update = function() {
 				//console.log("HIT");
 				app.bullets.splice(i, 1);
 				app.scene.remove(b);
+
+				if (health == 0) {
+					Game.Die();
+				}
 			}
 		}
 		if (!hit) {

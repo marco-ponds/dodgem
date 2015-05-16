@@ -44,6 +44,12 @@ function onSocketConnection(client) {
 
     // Listen for shooting player
     client.on("shooting player", onShootingPlayer);
+
+    // Listen for died player
+    client.on("Idied", onDeadPlayer);
+
+    // Listen for another match message
+    client.on("anothermatch", onAnotherMatchRequest);
 };
 
 // Socket client has disconnected
@@ -116,6 +122,59 @@ function onNewPlayer(data) {
         playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!"});
     }
 };
+
+// Player has died
+function onDeadPlayer(data) {
+    // Find player in array
+    var deadPlayer = playerById(this.id);
+
+    // Player not found
+    if (!deadPlayer) {
+        //util.log("Player not found: "+this.id);
+        return;
+    };
+
+    // searching for matched player, and sending data
+    var opponentId = matches[this.id];
+    if (!opponentId) {
+        //util.log("No match found!");
+        return;
+    }
+
+    // the other player has win!
+    playerById(opponentId).emit("win");
+}
+
+// Player has requested another match
+function onAnotherMatchRequested(data) {
+    // Find player in array
+    var requestingPlayer = playerById(this.id);
+
+    // Player not found
+    if (!requestingPlayer) {
+        //util.log("Player not found: "+this.id);
+        return;
+    };
+
+    // searching for a pending player
+    var id = _.sample(pendings);
+    if (!id) {
+        // we didn't find a player
+        console.log("added " + this.id + " to pending");
+        pendings.push(requestingPlayer.id);
+        // sending a pending event to player
+        requestingPlayer.getSocket().emit("pending", {status: "pending", message: "waiting for a new player."});
+    } else {
+        // creating match
+        pendings = _.without(pendings, id);
+        matches[id] = requestingPlayer.id;
+        matches[requestingPlayer.id] = id;
+
+        // sending both player info that they're connected
+        requestingPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!"});
+        playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!"});
+    }
+}
 
 // Player has moved
 function onMovePlayer(data) {
