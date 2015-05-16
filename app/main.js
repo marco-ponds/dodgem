@@ -20,7 +20,7 @@ Class("Dodgem", {
 
 	onCreate: function() {
 
-		var server = "http://192.168.0.104:8000";
+		var server = "http://marcostagni.com:8000";
 		this.socket = io(server, {'transports': ['websocket']});//io("http://marcostagni.com:8080");
 		this.socket.on("connect", function(data) {
 			console.log(data);
