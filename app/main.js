@@ -97,6 +97,13 @@ Class("Dodgem", {
             shininess: 30
         });
 		app.bulletgeo = new THREE.SphereGeometry(4, 6, 6);
+		app.enemybulletmat = new THREE.MeshPhongMaterial({
+        	color: 0xff0000,
+        	ambient: 0xffffff,
+            specular: 0x555555,
+            shininess: 30
+        });
+		app.enemybulletgeo = new THREE.SphereGeometry(4, 6, 6);
 		app.bullets = []
 		app.raycaster = new THREE.Raycaster()
 		app.whichgun = true;
@@ -118,6 +125,8 @@ Class("Dodgem", {
 			app.opponent = new Player();
 		});
 		app.waiting = false;
+		//creating platform
+		app.platform.createObstacles(data.numObstacles, data.height, data.position);
 	},
 
 	onGonePlayer: function(data) {
@@ -132,11 +141,11 @@ Class("Dodgem", {
 
 	onShooting: function(data) {
 		// some one is shooting us!
-		var sphere = new Mesh(app.bulletgeo, app.bulletmat);
+		var sphere = new Mesh(app.enemybulletgeo, app.enemybulletmat);
 		sphere.mesh.position = new THREE.Vector3(data.startx, data.starty, data.startz);
 
 		// setting color
-		sphere.mesh.material.color = new THREE.Color(0xff0000);
+		//sphere.mesh.material.color = new THREE.Color(0xff0000);
 		//sphere.mesh.rotation.set(gunrotation.x, gunrotation.y, gunrotation.z)
 		sphere.mesh.position.y += 25;
 		sphere.mesh.pointing = new THREE.Vector3(data.dirx, data.diry, data.dirz);

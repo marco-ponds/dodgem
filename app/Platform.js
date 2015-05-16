@@ -108,9 +108,12 @@ Class("Platform", {
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(1, 1);
 
-        var numObstacles = _.random(10, 30)
+    },
+
+    createObstacles: function(numObstacles, height, positions) {
+        //var numObstacles = _.random(10, 30)
         for (var i=0; i<numObstacles; i++) {
-            height = _.random(70, 100)
+            //height = _.random(70, 100)
             width = 80
             var geometry = new THREE.BoxGeometry(
                 width,//Math.floor(Math.random() * 100) + 20, 
@@ -129,8 +132,8 @@ Class("Platform", {
             o.mesh.health = 3000;//_.random(1000, 5000);
             o.mesh.mindistance = width;
             // setting random position
-            o.mesh.position.x = _.random(this.MINUS_MAX_X, this.MAX_X)
-            o.mesh.position.z = _.random(this.MINUS_MAX_Z, this.MAX_Z)
+            o.mesh.position.x = positions[i].x;//_.random(this.MINUS_MAX_X, this.MAX_X)
+            o.mesh.position.z = positions[i].z;//_.random(this.MINUS_MAX_Z, this.MAX_Z)
             o.mesh.position.y = height/2;
             // adding obstacle to array, for mesh collisions
             this.obstacles.push(o.mesh)
