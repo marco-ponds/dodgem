@@ -15,12 +15,10 @@ function init() {
     matches = {};
     // socket.io setup
     socket = io.listen(8000);
-    //socket.configure(function() {
-        // setting socket io transport
+    // setting socket io transport
     socket.set("transports", ["websocket"]);
-        // setting socket io log level
+    // setting socket io log level
     socket.set("log lever", 2);
-    //});
     setEventHandlers();
 }
 
