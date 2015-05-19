@@ -168,6 +168,8 @@ Class("Dodgem", {
 
 	shoot: function(flag) {
 
+		if (app.waiting) return;
+
 		// shooting from left or right gun
 		inc_x = 12;
 		if (flag) {
