@@ -131,6 +131,9 @@ Class("Dodgem", {
 
 	onGonePlayer: function(data) {
 		swal(data.message, "Maybe you're too good for him!", "warning");
+		// other player must disappear
+		app.scene.remove(app.opponent.body.mesh);
+		app.opponent = undefined;
 	},
 
 	onPending: function(data) {
@@ -168,8 +171,6 @@ Class("Dodgem", {
 
 	shoot: function(flag) {
 
-		if (app.waiting) return;
-
 		// shooting from left or right gun
 		inc_x = 12;
 		if (flag) {
@@ -194,6 +195,9 @@ Class("Dodgem", {
 		app.bullets.push(sphere.mesh);
 
 		new Sound("shot", {mesh: Control.handler.getObject()}).start();
+
+		// if we're in pending mode, return
+		if (app.waiting) return;
 
 		// emitting shooting event, must send initial position of bullet, direction
 		app.socket.emit("shooting player", {
@@ -237,9 +241,14 @@ Game.Die = function() {
 			app.scene.remove(app.opponent.body.mesh);
 			app.opponent = undefined;
 			$('#hurt').fadeOut(350);
+			// removing all obstacles
+			app.platform.removeAllObstacles();
 		} else {
 			swal("Ok!", "Feel free to wander around, reload the page for another match.", "info");
 			$('#hurt').fadeOut(350);
+			// other player must disappear
+			app.scene.remove(app.opponent.body.mesh);
+			app.opponent = undefined;
 		}
 	});
 	app.socket.emit("Idied");
@@ -262,8 +271,18 @@ Game.Win = function() {
 		if (isConfirm) {
 			swal("Good!", "Your imaginary file has been deleted.", "success");
 			app.socket.emit("anothermatch");
+			// other player must disappear
+			app.scene.remove(app.opponent.body.mesh);
+			app.opponent = undefined;
+			$('#hurt').fadeOut(350);
+			// removing all obstacles
+			app.platform.removeAllObstacles();
 		} else {
 			swal("Ok!", "Feel free to wander around, reload the page for another match.", "info");
+			// other player must disappear
+			app.scene.remove(app.opponent.body.mesh);
+			app.opponent = undefined;
+			$('#hurt').fadeOut(350);
 		}
 	});
 }
@@ -286,7 +305,6 @@ Game.update = function() {
 		for (var j = app.platform.obstacles.length-1; j >= 0; j--) {
 			// breaking if we're waiting for player
 			if (app.waiting) break;
-
 			var a = app.platform.obstacles[j];
 			var v = a.geometry.vertices[0];
 			var c = a.position;
@@ -333,14 +351,13 @@ Game.update = function() {
 				hit = true;
 			}
 		} else {
-			if (!app.opponent) break;
-			if (distance(p.x, p.y, p.z, app.opponent.body.mesh.position.x, app.opponent.body.mesh.position.y, app.opponent.body.mesh.position.z) < 100) {
-				console.log("HIT");
-				app.bullets.splice(i, 1);
-				app.scene.remove(b);
-				hit = true;
-			} else {
-				console.log("NOT HIT");
+			if (app.opponent) {
+				if (distance(p.x, p.y, p.z, app.opponent.body.mesh.position.x, app.opponent.body.mesh.position.y, app.opponent.body.mesh.position.z) < 100) {
+					console.log("HIT");
+					app.bullets.splice(i, 1);
+					app.scene.remove(b);
+					hit = true;
+				}
 			}
 		}
 		if (!hit) {
