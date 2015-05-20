@@ -105,6 +105,15 @@ Class("Platform", {
 
     },
 
+    removeAllObstacles: function() {
+        // removing obstacles from scene
+        for (var i=0; i<this.obstacles.length; i++) {
+            app.scene.remove(this.obstacles[i].mesh);
+        }
+        // resetting obstacles
+        this.obstacles = [];
+    },
+
     createObstacles: function(numObstacles, height, positions) {
         // creating random obstacles
         var texture = THREE.ImageUtils.loadTexture( "img/platform_obstacle.jpg" );
