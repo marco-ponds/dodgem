@@ -66,7 +66,7 @@ Class("Dodgem", {
         texture.wrapT = THREE.RepeatWrapping;
         texture.repeat.set(17, 5);
 
-        var gunmaterial = new THREE.MeshPhongMaterial({
+        var gunmaterial = new THREE.MeshLambertMaterial({
             ambient: 0xffffff,
             color: 0x0033ff,
             specular: 0x555555,
@@ -90,14 +90,14 @@ Class("Dodgem", {
         document.addEventListener("mousedown", app.onMouseDown)
 
         // bullet properties
-        app.bulletmat = new THREE.MeshPhongMaterial({
+        app.bulletmat = new THREE.MeshLambertMaterial({
         	color: 0x22A7F0,
         	ambient: 0xffffff,
             specular: 0x555555,
             shininess: 30
         });
 		app.bulletgeo = new THREE.SphereGeometry(4, 6, 6);
-		app.enemybulletmat = new THREE.MeshPhongMaterial({
+		app.enemybulletmat = new THREE.MeshLambertMaterial({
         	color: 0xff0000,
         	ambient: 0xffffff,
             specular: 0x555555,

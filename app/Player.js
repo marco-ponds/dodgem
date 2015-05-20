@@ -18,6 +18,9 @@ Class("Player", {
 
         this.body = new Mesh(geometry, material);
         this.body.mesh.position.y = 25;
+        this.body.mesh.material.needsUpdate = true;
+        this.body.mesh.castShadow = true;
+        this.body.mesh.receiveShadow = true;
 
         // creating guns
         var texture = THREE.ImageUtils.loadTexture( "img/player_gun.png" );
@@ -38,10 +41,16 @@ Class("Player", {
         guns.push(new THREE.Mesh(gungeometry, gunmaterial))
         this.body.mesh.add(guns[0])
         guns[0].position.set(-9, 0, 10)
+        guns[0].mesh.material.needsUpdate = true;
+        guns[0].mesh.castShadow = true;
+        guns[0].mesh.receiveShadow = true;
 
         guns.push(new THREE.Mesh(gungeometry, gunmaterial))
         this.body.mesh.add(guns[1])
         guns[1].position.set(9, 0, 10)
+        guns[1].mesh.material.needsUpdate = true;
+        guns[1].mesh.castShadow = true;
+        guns[1].mesh.receiveShadow = true;
 
 
     }
