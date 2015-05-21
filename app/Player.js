@@ -41,16 +41,16 @@ Class("Player", {
         guns.push(new THREE.Mesh(gungeometry, gunmaterial))
         this.body.mesh.add(guns[0])
         guns[0].position.set(-9, 0, 10)
-        guns[0].mesh.material.needsUpdate = true;
-        guns[0].mesh.castShadow = true;
-        guns[0].mesh.receiveShadow = true;
+        guns[0].material.needsUpdate = true;
+        guns[0].castShadow = true;
+        guns[0].receiveShadow = true;
 
         guns.push(new THREE.Mesh(gungeometry, gunmaterial))
         this.body.mesh.add(guns[1])
         guns[1].position.set(9, 0, 10)
-        guns[1].mesh.material.needsUpdate = true;
-        guns[1].mesh.castShadow = true;
-        guns[1].mesh.receiveShadow = true;
+        guns[1].material.needsUpdate = true;
+        guns[1].castShadow = true;
+        guns[1].receiveShadow = true;
 
 
     }
