@@ -175,7 +175,7 @@ Class("Dodgem", {
 		// opponent is moving
 		if (!app.opponent) return;
 		app.opponent.body.mesh.position.set(data.x, data.y + 25, data.z)
-		app.opponent.body.mesh.rotation.set(-data.rotx, -data.roty, -data.rotz);
+		app.opponent.body.mesh.rotation.set(-data.rotx, data.roty, -data.rotz);
 	},
 
 	shoot: function(flag) {
