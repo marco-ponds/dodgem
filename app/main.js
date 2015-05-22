@@ -123,10 +123,14 @@ Class("Dodgem", {
 		swal(data.message, "Kill him!", "success");
 		include("app/Player", function() {
 			app.opponent = new Player();
+			// moving player to the right position
+			app.opponent.body.mesh.position.set(data.otherpos.x, 25, data.otherpos.z);
 		});
 		app.waiting = false;
 		//creating platform
 		app.platform.createObstacles(data.numObstacles, data.height, data.positions);
+		// moving to right position
+		app.camera.object.parent.parent.position.set(data.mypos.x, 25, data.mypos.z);
 	},
 
 	onGonePlayer: function(data) {
