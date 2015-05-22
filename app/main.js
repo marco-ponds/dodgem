@@ -127,6 +127,9 @@ Class("Dodgem", {
 			app.opponent.body.mesh.position.set(data.otherpos.x, 25, data.otherpos.z);
 		});
 		app.waiting = false;
+		app.platform.removeAllObstacles();
+		Game.HEALTH = Game.MAX_HEALTH;
+		console.log(data);
 		//creating platform
 		app.platform.createObstacles(data.numObstacles, data.height, data.positions);
 		// moving to right position
@@ -136,8 +139,10 @@ Class("Dodgem", {
 	onGonePlayer: function(data) {
 		swal(data.message, "Maybe you're too good for him!", "warning");
 		// other player must disappear
-		app.scene.remove(app.opponent.body.mesh);
-		app.opponent = undefined;
+		if (app.opponent) {
+			app.scene.remove(app.opponent.body.mesh);
+			app.opponent = undefined;
+		}
 	},
 
 	onPending: function(data) {
