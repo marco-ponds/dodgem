@@ -43,13 +43,14 @@ Game.script("cameraScript", {
 		}
 
 		// sending movement via socket
+		var rotation = this.object.getWorldRotation();
 		app.socket.emit("move player", {
 			x: this.object.parent.parent.position.x,
 			y: this.object.parent.parent.position.y,
 			z: this.object.parent.parent.position.z,
-			rotx: 0,
-			roty: 0,
-			rotz: 0
+			rotx: rotation._x,
+			roty: rotation._y,
+			rotz: rotation._z
 		});
 	}
 
