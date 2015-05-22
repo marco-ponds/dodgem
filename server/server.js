@@ -157,7 +157,7 @@ function onNewPlayer(data) {
             };
         }
         // sending both player info that they're connected
-        requestingPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions, mypos: p1, otherpos: p2});
+        newPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions, mypos: p1, otherpos: p2});
         playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions, mypos: p2, otherpos: p1});
     }
 };
