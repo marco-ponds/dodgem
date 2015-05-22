@@ -164,11 +164,12 @@ Class("Dodgem", {
 		sphere.mesh.shotby = "enemy";
 
 		app.bullets.push(sphere.mesh);
-		try {
+		/*try {
 			new Sound("shot", {mesh: app.opponent.body.mesh}).start();
 		} catch (e) {
 			new Sound("shot", {mesh: Control.handler.getObject()}).start();
-		}
+		}*/
+		new Sound("shot").start();
 
 		//console.log(sphere);
 
