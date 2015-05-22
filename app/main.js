@@ -167,7 +167,7 @@ Class("Dodgem", {
 		try {
 			new Sound("shot", {mesh: app.opponent.body.mesh}).start();
 		} catch (e) {
-			new Sound("shot").start();
+			new Sound("shot", {mesh: Control.handler.getObject()}).start();
 		}
 
 		//console.log(sphere);
