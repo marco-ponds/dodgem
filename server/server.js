@@ -134,9 +134,31 @@ function onNewPlayer(data) {
             });
         }
         console.log(numObstacles, height, positions);
+        // choosing two points for players
+        var p1 = {
+            x: _.random(MINUS_MAX_X, MAX_X),
+            z: _.random(MINUS_MAX_Z, MAX_Z) 
+        };
+
+        var p2 = {
+            x: _.random(MINUS_MAX_X, MAX_X),
+            z: _.random(MINUS_MAX_Z, MAX_Z) 
+        };
+        // check if positions are right
+        while ((_.where(positions, p1) != 0) && (_.where(positions, p2) != 0) && !_.isEqual(p1, p2)) {
+            p1 = {
+                x: _.random(MINUS_MAX_X, MAX_X),
+                z: _.random(MINUS_MAX_Z, MAX_Z) 
+            };
+
+            p2 = {
+                x: _.random(MINUS_MAX_X, MAX_X),
+                z: _.random(MINUS_MAX_Z, MAX_Z) 
+            };
+        }
         // sending both player info that they're connected
-        newPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions});
-        playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions});
+        requestingPlayer.getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions, mypos: p1, otherpos: p2});
+        playerById(id).getSocket().emit("matchstarted", {status: "matchstarted", message: "Player found!", numObstacles: numObstacles, height: height, positions: positions, mypos: p2, otherpos: p1});
     }
 };
 

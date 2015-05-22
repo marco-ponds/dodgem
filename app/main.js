@@ -23,7 +23,7 @@ Class("Dodgem", {
 		var server = "http://marcostagni.com:8000";
 		this.socket = io(server, {'transports': ['websocket']});//io("http://marcostagni.com:8080");
 		this.socket.on("connect", function(data) {
-			console.log(data);
+			//console.log(data);
 		});
 		// setting socket listeners
 		this.socket.on("shooting", app.onShooting);
@@ -129,7 +129,7 @@ Class("Dodgem", {
 		app.waiting = false;
 		app.platform.removeAllObstacles();
 		Game.HEALTH = Game.MAX_HEALTH;
-		console.log(data);
+		//console.log(data);
 		//creating platform
 		app.platform.createObstacles(data.numObstacles, data.height, data.positions);
 		// moving to right position
@@ -146,16 +146,16 @@ Class("Dodgem", {
 	},
 
 	onPending: function(data) {
-		console.log("received pending message");
+		//console.log("received pending message");
 		swal(data.message, "Waiting for a player to come in.", "info");
 		app.waiting = true;
 	},
 
 	onShooting: function(data) {
-		console.log(data)
+		//console.log(data)
 		// some one is shooting us!
 		var sphere = new Mesh(app.enemybulletgeo, app.enemybulletmat);
-		console.log(data)
+		//console.log(data)
 		sphere.mesh.position.set(data.startx, data.starty, data.startz);
 
 		//sphere.mesh.rotation.set(gunrotation.x, gunrotation.y, gunrotation.z)
@@ -167,7 +167,7 @@ Class("Dodgem", {
 
 		new Sound("shot", {mesh: app.opponent.body.mesh}).start();
 
-		console.log(sphere);
+		//console.log(sphere);
 
 	},
 
@@ -350,7 +350,7 @@ Game.update = function() {
 				var per = (100*Game.HEALTH)/Game.MAX_HEALTH;
 				$('#health').css("width", per+"%");
 				$('#hurt').fadeOut(350);
-				//console.log("HIT");
+				////console.log("HIT");
 				app.bullets.splice(i, 1);
 				app.scene.remove(b);
 
@@ -362,7 +362,7 @@ Game.update = function() {
 		} else {
 			if (app.opponent) {
 				if (distance(p.x, p.y, p.z, app.opponent.body.mesh.position.x, app.opponent.body.mesh.position.y, app.opponent.body.mesh.position.z) < 100) {
-					console.log("HIT");
+					//console.log("HIT");
 					app.bullets.splice(i, 1);
 					app.scene.remove(b);
 					hit = true;
@@ -380,7 +380,7 @@ Game.update = function() {
 // calculating distance
 function distance(x1, y1, z1, x2, y2, z2) {
 	var value = Math.sqrt(((x2-x1)*(x2-x1))+((y2-y1)*(y2-y1))+((z2-z1)*(z2-z1)));
-	console.log(value);
+	//console.log(value);
 	return value;
 }
 
