@@ -5,6 +5,14 @@
 
 // https://raw.githubusercontent.com/IceCreamYou/Nemesis/master/main.js
 
+// adding pointer lock test
+Util.tests.push("pointerlock");
+Util.check.pointerlock = function() {
+	var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+	return havePointerLock;
+}
+
+
 include([
 	"app/scripts/cube/mybox",
 	"app/scripts/camera/cameraScript",
@@ -16,6 +24,13 @@ Class("Dodgem", {
 	Dodgem: function() {
 		App.call(this);
 		// we now should connect to server
+	},
+
+	onFailedTest: function(message, data) {
+		swal("Oh snap!", "Your browser doesn't support this game. Please upgrade to Chrome.", "info");
+		setTimeout(function() {
+			location.href = 'https://www.google.it/chrome/browser/desktop/';
+		}, 5000);
 	},
 
 	onCreate: function() {
