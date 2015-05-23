@@ -1,4 +1,4 @@
-/*! wage version: 0.0.37, 22-05-2015 */
+/*! wage version: 0.0.37, 23-05-2015 */
 function ParticleTween(a, b) {
     this.times = a || [], this.values = b || [];
 }
@@ -17161,7 +17161,9 @@ Gui = {
             var f = new THREE.Vector3();
             f.setFromMatrixPosition(this.mesh.matrixWorld);
             var g = f.x - c, h = f.y - d, i = f.z - e;
-            this.sound.panner.setPosition(f.x, f.y, f.z), this.sound.panner.setVelocity(g / a, h / a, i / a);
+            try {
+                this.sound.panner.setPosition(f.x, f.y, f.z), this.sound.panner.setVelocity(g / a, h / a, i / a);
+            } catch (j) {}
         }
     }
 })._extends("Beat"), Class("AmbientSound", {
