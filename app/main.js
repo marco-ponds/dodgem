@@ -193,7 +193,7 @@ Class("Dodgem", {
 	onMove: function(data) {
 		// opponent is moving
 		if (!app.opponent) return;
-		app.opponent.body.mesh.position.set(data.x, data.yx, data.z)
+		app.opponent.body.mesh.position.set(data.x, 25, data.z)
 		app.opponent.body.mesh.rotation.set(data.rotx, -data.roty, -data.rotz);
 	},
 
